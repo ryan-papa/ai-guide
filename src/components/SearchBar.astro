@@ -1,0 +1,185 @@
+---
+// Pagefind 검색 UI - 빌드 후에만 동작, 개발 모드에서는 placeholder 표시
+---
+
+<div class="relative">
+  <button
+    id="search-trigger"
+    type="button"
+    class="flex h-10 items-center gap-2 rounded-lg border border-border-secondary bg-bg-secondary px-3 text-sm text-text-tertiary transition-colors hover:border-border-primary hover:text-text-secondary"
+    aria-label="검색"
+  >
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <span class="hidden sm:inline">검색...</span>
+    <kbd
+      class="ml-2 hidden rounded border border-border-secondary bg-bg-primary px-1.5 py-0.5 text-xs font-mono text-text-tertiary sm:inline"
+    >
+      /
+    </kbd>
+  </button>
+</div>
+
+<!-- 검색 모달 -->
+<div
+  id="search-modal"
+  class="fixed inset-0 z-[100] hidden items-start justify-center bg-black/50 backdrop-blur-sm pt-[15vh]"
+>
+  <div
+    id="search-dialog"
+    class="mx-4 w-full max-w-lg rounded-xl border border-border-secondary bg-bg-primary shadow-2xl"
+  >
+    <div class="flex items-center gap-3 border-b border-border-secondary px-4 py-3">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        class="shrink-0 text-text-tertiary"
+      >
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input
+        id="search-input"
+        type="text"
+        placeholder="글 제목이나 내용을 검색하세요..."
+        class="w-full bg-transparent text-sm text-text-primary outline-none placeholder:text-text-tertiary"
+        autocomplete="off"
+      />
+      <kbd
+        class="shrink-0 rounded border border-border-secondary bg-bg-secondary px-1.5 py-0.5 text-xs font-mono text-text-tertiary"
+      >
+        ESC
+      </kbd>
+    </div>
+    <div
+      id="search-results"
+      class="max-h-80 overflow-y-auto px-2 py-2"
+    >
+      <p class="px-3 py-6 text-center text-sm text-text-tertiary">
+        검색어를 입력하세요
+      </p>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    const trigger = document.getElementById("search-trigger");
+    const modal = document.getElementById("search-modal");
+    const input = document.getElementById("search-input");
+    const results = document.getElementById("search-results");
+    let pagefind = null;
+
+    function openSearch() {
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      input.value = "";
+      input.focus();
+      results.innerHTML =
+        '<p class="px-3 py-6 text-center text-sm text-text-tertiary">검색어를 입력하세요</p>';
+    }
+
+    function closeSearch() {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    trigger.addEventListener("click", openSearch);
+
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) closeSearch();
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "/" && !isInputFocused()) {
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === "Escape") closeSearch();
+    });
+
+    function isInputFocused() {
+      const el = document.activeElement;
+      return el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
+    }
+
+    async function loadPagefind() {
+      if (pagefind) return pagefind;
+      try {
+        pagefind = await import("/ai-guide/pagefind/pagefind.js");
+        await pagefind.init();
+        return pagefind;
+      } catch {
+        return null;
+      }
+    }
+
+    let debounceTimer;
+    input.addEventListener("input", function () {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => performSearch(input.value), 200);
+    });
+
+    async function performSearch(query) {
+      if (!query.trim()) {
+        results.innerHTML =
+          '<p class="px-3 py-6 text-center text-sm text-text-tertiary">검색어를 입력하세요</p>';
+        return;
+      }
+
+      const pf = await loadPagefind();
+      if (!pf) {
+        results.innerHTML =
+          '<p class="px-3 py-6 text-center text-sm text-text-tertiary">검색은 빌드 후 사용할 수 있습니다</p>';
+        return;
+      }
+
+      const search = await pf.search(query);
+      if (!search.results.length) {
+        results.innerHTML =
+          '<p class="px-3 py-6 text-center text-sm text-text-tertiary">검색 결과가 없습니다</p>';
+        return;
+      }
+
+      const items = await Promise.all(
+        search.results.slice(0, 8).map((r) => r.data())
+      );
+
+      results.innerHTML = items
+        .map(
+          (item) =>
+            '<a href="' +
+            item.url +
+            '" class="block rounded-lg px-3 py-3 text-sm transition-colors hover:bg-bg-secondary">' +
+            '<div class="font-medium text-text-primary">' +
+            escapeHtml(item.meta?.title || item.url) +
+            "</div>" +
+            '<div class="mt-1 text-xs text-text-tertiary line-clamp-2">' +
+            (item.excerpt || "") +
+            "</div></a>"
+        )
+        .join("");
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+  })();
+</script>

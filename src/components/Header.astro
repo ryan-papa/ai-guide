@@ -1,4 +1,6 @@
 ---
+import SearchBar from "./SearchBar.astro";
+
 interface Props {
   title?: string;
 }
@@ -18,8 +20,11 @@ const base = import.meta.env.BASE_URL;
       {title}
     </a>
 
-    <!-- 다크모드 토글 -->
-    <button
+    <div class="flex items-center gap-2">
+      <SearchBar />
+
+      <!-- 다크모드 토글 -->
+      <button
       id="theme-toggle"
       type="button"
       class="flex h-10 w-10 items-center justify-center rounded-lg text-text-secondary transition-colors hover:bg-bg-secondary"
@@ -59,7 +64,8 @@ const base = import.meta.env.BASE_URL;
         <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
       </svg>
-    </button>
+      </button>
+    </div>
   </div>
 </header>
 
