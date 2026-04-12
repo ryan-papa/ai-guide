@@ -64,7 +64,7 @@ function isActive(href: string): boolean {
 <!-- 모바일 오버레이 -->
 <div
   id="sidebar-overlay"
-  class="fixed inset-0 z-40 hidden bg-black/50 backdrop-blur-sm lg:hidden"
+  class="fixed inset-0 z-40 hidden bg-black/60 lg:hidden"
 ></div>
 
 <!-- 사이드바 -->
@@ -108,15 +108,21 @@ function isActive(href: string): boolean {
     const toggle = document.getElementById("sidebar-toggle");
     const sidebar = document.getElementById("sidebar");
     const overlay = document.getElementById("sidebar-overlay");
+    const iconOpen = document.getElementById("menu-icon-open");
+    const iconClose = document.getElementById("menu-icon-close");
 
     function openSidebar() {
       sidebar.classList.remove("-translate-x-full");
       overlay.classList.remove("hidden");
+      if (iconOpen) iconOpen.classList.add("hidden");
+      if (iconClose) iconClose.classList.remove("hidden");
     }
 
     function closeSidebar() {
       sidebar.classList.add("-translate-x-full");
       overlay.classList.add("hidden");
+      if (iconOpen) iconOpen.classList.remove("hidden");
+      if (iconClose) iconClose.classList.add("hidden");
     }
 
     if (toggle) {
