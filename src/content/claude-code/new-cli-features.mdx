@@ -1,0 +1,142 @@
+---
+title: "Claude Code CLI 신기능"
+description: "Ultraplan, Remote Control, Headless 등 최신 CLI 기능을 알아봅니다."
+order: 5
+category: "claude-code"
+level: "초급"
+tags: ["Ultraplan", "Remote Control", "Headless", "CLI"]
+draft: false
+publishedAt: 2026-04-12
+---
+
+# 🚀 Claude Code CLI 신기능
+
+Claude Code는 빠르게 진화하고 있어요. 2025~2026년에 추가된 핵심 CLI 기능들을 살펴볼게요.
+
+## ☁️ Ultraplan — 클라우드 플래닝
+
+복잡한 작업의 계획을 클라우드에서 수립하고, 브라우저에서 리뷰하는 기능이에요.
+
+### 어떻게 동작하나요?
+
+```
+/ultraplan 인증 서비스를 세션에서 JWT로 마이그레이션해 줘
+```
+
+1. 클라우드에서 Claude가 상세 계획을 수립해요
+2. 터미널에 `◇ ultraplan ready` 상태가 표시돼요
+3. 브라우저에서 계획을 리뷰하고 코멘트를 남길 수 있어요
+4. 승인 후 클라우드에서 실행(→ PR 생성) 또는 로컬로 가져올 수 있어요
+
+### 호출 방법
+
+| 방법 | 예시 |
+|------|------|
+| 슬래시 명령 | `/ultraplan <프롬프트>` |
+| 키워드 포함 | 프롬프트에 "ultraplan" 단어 포함 |
+| 로컬 플랜에서 전환 | Plan 모드에서 "Ultraplan으로 전환" 선택 |
+
+### 상태 표시
+
+- `◇ ultraplan` — 계획 수립 중
+- `◇ ultraplan needs your input` — 추가 질문이 있음
+- `◆ ultraplan ready` — 브라우저에서 리뷰 가능
+
+## 📱 Remote Control — 원격 세션
+
+로컬 터미널 세션을 모바일이나 다른 브라우저에서 이어서 작업할 수 있는 기능이에요.
+
+### 사용 방법
+
+```
+/remote-control
+```
+
+QR 코드와 세션 URL이 표시돼요. 스마트폰이나 다른 기기에서 접속하면 같은 세션을 원격으로 조작할 수 있어요.
+
+### 보안
+
+- 파일과 MCP 서버는 로컬에 남아요 — 채팅 메시지만 암호화 전송
+- 인바운드 포트를 열지 않아요 — 아웃바운드 HTTPS만 사용
+- 네트워크 끊김 시 최대 10분간 자동 재연결
+
+## 🤖 Headless 모드 — CI/CD 자동화
+
+Claude Code를 비대화형으로 실행해서 CI/CD 파이프라인에 통합할 수 있어요.
+
+### 기본 사용
+
+```bash
+claude -p "src/의 모든 타입 에러를 수정해 줘" --output-format json
+```
+
+`-p` 플래그로 프롬프트를 직접 전달하면, 대화 없이 작업을 수행하고 결과를 출력해요.
+
+### GitHub Actions 연동
+
+PR 이벤트에 Claude Code를 트리거해서 자동 리뷰, 코드 수정, 결과 코멘트까지 가능해요.
+
+## ⚡ 새 슬래시 명령 모음
+
+| 명령 | 기능 |
+|------|------|
+| `/ultraplan` | 클라우드 기반 고급 플래닝 |
+| `/rc` | Remote Control 세션 시작 |
+| `/agents` | 실행 중인 에이전트 목록·상태 확인 |
+| `/tasks` | 서브에이전트 태스크 관리 |
+| `/loop` | 프롬프트/명령을 주기적으로 반복 실행 |
+| `/effort` | 사고 깊이(thinking level) 조절 |
+| `/cost` | 모델별 비용 분석 (캐시 히트율 포함) |
+
+## 💬 시나리오 예시
+
+### 예시 1: 대규모 마이그레이션 계획
+
+**상황**: 모놀리식 앱을 마이크로서비스로 분리해야 한다.
+
+> ❌ **Before (로컬 플래닝)**
+> 로컬에서 긴 계획을 수립하면 터미널이 점유된다. 계획서를 팀원과 공유하려면 별도 복사가 필요하다.
+
+> ✅ **After (Ultraplan)**
+> `/ultraplan` 으로 클라우드에 위임하면 터미널이 자유로워진다. 브라우저에서 팀원과 함께 계획을 리뷰하고 코멘트를 달 수 있다.
+
+### 예시 2: 이동 중 코드 리뷰
+
+**상황**: 퇴근길에 긴급 PR 리뷰 요청이 왔다.
+
+> ❌ **Before (데스크톱 전용)**
+> 노트북을 열어야만 Claude Code를 사용할 수 있다. 스마트폰으로는 불가능하다.
+
+> ✅ **After (Remote Control)**
+> 사무실 PC에서 `/rc`로 세션을 열어두면, 스마트폰에서 QR 코드를 스캔해 원격으로 리뷰를 진행한다.
+
+### 예시 3: PR 자동 품질 게이트
+
+**상황**: 모든 PR에 코드 품질 검사를 자동으로 적용하고 싶다.
+
+> ❌ **Before (수동 리뷰)**
+> PR마다 개발자가 직접 Claude Code를 열어 리뷰를 요청한다. 누락되는 경우가 생긴다.
+
+> ✅ **After (Headless + GitHub Actions)**
+> PR 생성 시 `claude -p "이 PR을 리뷰해 줘"` 가 자동 실행되고, 결과가 PR 코멘트로 등록된다.
+
+## 📖 핵심 용어
+
+| 용어 | 설명 | 예시 |
+|------|------|------|
+| **Ultraplan** | 클라우드에서 계획을 수립하고 브라우저에서 리뷰하는 기능 | `/ultraplan 마이그레이션 계획` |
+| **Remote Control** | 로컬 세션을 다른 기기에서 원격 조작하는 기능 | `/rc` → QR 스캔 |
+| **Headless 모드** | 대화 없이 CLI에서 직접 실행하는 비대화형 모드 | `claude -p "..."` |
+| **Plan 모드** | 파일 수정 전에 상세 계획을 먼저 수립하는 모드 | Ultraplan의 로컬 버전 |
+| **GitHub Actions** | PR 이벤트에 Claude Code를 자동 트리거하는 CI 연동 | PR 자동 리뷰 |
+
+## 📌 핵심 정리
+
+- **Ultraplan**: 복잡한 계획을 클라우드에서 수립, 브라우저에서 팀 리뷰
+- **Remote Control**: 로컬 세션을 모바일/브라우저에서 원격 이어가기
+- **Headless**: CI/CD 파이프라인에 Claude Code를 통합해 자동화
+- 새 슬래시 명령(`/agents`, `/loop`, `/effort` 등)으로 워크플로우가 더 풍부해졌어요
+
+## 👉 다음 단계
+
+API 레벨의 신기능인 **Advisor Tool, Managed Agents, MCP 강화**를 알아볼게요!
