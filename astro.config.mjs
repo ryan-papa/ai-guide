@@ -4,7 +4,7 @@ import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
   site: "https://your-username.github.io",
-  base: "/ai-guide",
+  base: "/ai-guide/",
   integrations: [mdx(), tailwind()],
   markdown: {
     shikiConfig: {
