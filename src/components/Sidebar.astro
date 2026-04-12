@@ -1,0 +1,92 @@
+---
+const base = import.meta.env.BASE_URL;
+const currentPath = Astro.url.pathname;
+
+interface NavItem {
+  label: string;
+  href: string;
+}
+
+interface NavCategory {
+  title: string;
+  emoji: string;
+  items: NavItem[];
+}
+
+const navigation: NavCategory[] = [
+  {
+    title: "AI 기초",
+    emoji: "🧠",
+    items: [
+      { label: "AI란 무엇인가", href: `${base}basics/what-is-ai/` },
+      { label: "머신러닝 개요", href: `${base}basics/machine-learning/` },
+      { label: "딥러닝 기초", href: `${base}basics/deep-learning/` },
+    ],
+  },
+  {
+    title: "AI 발전사",
+    emoji: "📜",
+    items: [
+      { label: "AI의 역사", href: `${base}history/timeline/` },
+      { label: "트랜스포머 혁명", href: `${base}history/transformer/` },
+      { label: "LLM 시대", href: `${base}history/llm-era/` },
+    ],
+  },
+  {
+    title: "엔지니어링 기법",
+    emoji: "⚙️",
+    items: [
+      { label: "프롬프트 엔지니어링", href: `${base}engineering/prompting/` },
+      { label: "RAG 패턴", href: `${base}engineering/rag/` },
+      { label: "파인튜닝", href: `${base}engineering/fine-tuning/` },
+    ],
+  },
+  {
+    title: "Claude Code 도구",
+    emoji: "🔧",
+    items: [
+      { label: "시작하기", href: `${base}claude-code/getting-started/` },
+      { label: "워크플로우", href: `${base}claude-code/workflow/` },
+      { label: "팁과 트릭", href: `${base}claude-code/tips/` },
+    ],
+  },
+];
+
+function isActive(href: string): boolean {
+  return currentPath === href || currentPath === href.replace(/\/$/, "");
+}
+---
+
+<aside
+  class="fixed left-0 top-16 hidden h-[calc(100vh-4rem)] w-64 overflow-y-auto border-r border-border-secondary bg-bg-primary pb-8 pt-6 lg:block"
+>
+  <nav class="px-4">
+    {
+      navigation.map((category) => (
+        <div class="mb-6">
+          <h3 class="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-text-tertiary">
+            <span class="mr-1.5">{category.emoji}</span>
+            {category.title}
+          </h3>
+          <ul class="space-y-0.5">
+            {category.items.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class:list={[
+                    "block rounded-lg px-3 py-2 text-sm no-underline transition-colors",
+                    isActive(item.href)
+                      ? "bg-accent/10 font-medium text-accent"
+                      : "text-text-secondary hover:bg-bg-secondary hover:text-text-primary",
+                  ]}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </nav>
+</aside>
