@@ -132,6 +132,13 @@ a:hover { opacity: 0.8; }
   color: var(--text-accent);
 }
 
+/* 본문 오버플로우 방지 */
+.prose-custom {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  min-width: 0;
+}
+
 /* 코드 블록 */
 .prose-custom pre {
   background: var(--bg-tertiary);
@@ -140,6 +147,7 @@ a:hover { opacity: 0.8; }
   border-radius: 12px;
   padding: 1.25rem;
   overflow-x: auto;
+  max-width: calc(100vw - 3rem);
 }
 
 /* 인용문 */
