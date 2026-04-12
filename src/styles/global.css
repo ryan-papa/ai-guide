@@ -147,7 +147,12 @@ a:hover { opacity: 0.8; }
   border-radius: 12px;
   padding: 1.25rem;
   overflow-x: auto;
-  max-width: calc(100vw - 3rem);
+  max-width: 100%;
+}
+
+/* 본문 컨테이너 오버플로우 방지 */
+.prose-custom > * {
+  max-width: 100%;
 }
 
 /* 인용문 */
