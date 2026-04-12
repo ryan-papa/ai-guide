@@ -5,6 +5,7 @@ const guideSchema = z.object({
   description: z.string(),
   order: z.number(),
   category: z.enum(["ai-basics", "ai-history", "engineering", "claude-code"]),
+  level: z.enum(["입문", "초급", "중급", "고급"]).default("입문"),
   tags: z.array(z.string()).optional(),
   draft: z.boolean().default(false),
   publishedAt: z.coerce.date().optional(),
