@@ -1,0 +1,57 @@
+---
+// 난이도별 필터 버튼 UI
+// 클라이언트 JS로 필터링 동작 처리
+const levels = ["전체", "입문", "초급", "중급", "고급"] as const;
+
+const buttonColors: Record<string, string> = {
+  전체: "data-[active]:bg-accent data-[active]:text-white",
+  입문: "data-[active]:bg-green-500/15 data-[active]:text-green-700 dark:data-[active]:text-green-400",
+  초급: "data-[active]:bg-blue-500/15 data-[active]:text-blue-700 dark:data-[active]:text-blue-400",
+  중급: "data-[active]:bg-yellow-500/15 data-[active]:text-yellow-700 dark:data-[active]:text-yellow-400",
+  고급: "data-[active]:bg-red-500/15 data-[active]:text-red-700 dark:data-[active]:text-red-400",
+};
+---
+
+<div class="mb-6 flex flex-wrap gap-2" id="difficulty-filter">
+  {levels.map((level) => (
+    <button
+      type="button"
+      data-level={level}
+      data-active={level === "전체" ? "" : undefined}
+      class:list={[
+        "rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
+        "border border-border-secondary text-text-secondary hover:border-border-primary",
+        buttonColors[level],
+      ]}
+    >
+      {level}
+    </button>
+  ))}
+</div>
+
+<script is:inline>
+  (function () {
+    const filter = document.getElementById("difficulty-filter");
+    if (!filter) return;
+
+    const buttons = filter.querySelectorAll("button[data-level]");
+    const items = document.querySelectorAll("[data-difficulty]");
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const level = btn.getAttribute("data-level");
+
+        buttons.forEach(function (b) { b.removeAttribute("data-active"); });
+        btn.setAttribute("data-active", "");
+
+        items.forEach(function (item) {
+          if (level === "전체" || item.getAttribute("data-difficulty") === level) {
+            item.style.display = "";
+          } else {
+            item.style.display = "none";
+          }
+        });
+      });
+    });
+  })();
+</script>

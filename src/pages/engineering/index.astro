@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import DifficultyFilter from "../../components/DifficultyFilter.astro";
 import { getCollection } from "astro:content";
 
 const allPosts = await getCollection("engineering", ({ data }) => !data.draft);
@@ -15,15 +16,17 @@ const levelColors: Record<string, string> = {
 
 <BaseLayout title="엔지니어링 기법" description="AI 엔지니어링 기법과 프롬프트 전략을 배웁니다">
   <div class="mx-auto max-w-content px-6 py-12">
-    <h1 class="mb-2 text-3xl font-bold tracking-tight">⚙️ 엔지니어링 기법</h1>
+    <h1 class="mb-2 text-3xl font-bold tracking-tight">엔지니어링 기법</h1>
     <p class="mb-8 text-text-secondary">
       AI 엔지니어링 기법과 프롬프트 전략을 배웁니다.
     </p>
 
+    <DifficultyFilter />
+
     {posts.length > 0 ? (
       <ul class="space-y-4">
         {posts.map((post) => (
-          <li>
+          <li data-difficulty={post.data.level}>
             <a
               href={`/ai-guide/engineering/${post.slug}`}
               class="block rounded-lg border border-border-primary bg-bg-secondary p-5 transition-colors hover:border-accent"
@@ -41,7 +44,7 @@ const levelColors: Record<string, string> = {
       </ul>
     ) : (
       <div class="rounded-lg border border-border-primary bg-bg-secondary p-8 text-center">
-        <p class="text-text-secondary">아직 콘텐츠가 준비 중이에요 ✏️</p>
+        <p class="text-text-secondary">아직 콘텐츠가 준비 중이에요</p>
       </div>
     )}
   </div>
