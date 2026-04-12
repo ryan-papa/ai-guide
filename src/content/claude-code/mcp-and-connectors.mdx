@@ -1,0 +1,182 @@
+---
+title: "MCP와 커넥터"
+description: "Model Context Protocol로 AI를 외부 시스템과 연결하는 방법을 배웁니다."
+order: 4
+category: "claude-code"
+level: "고급"
+tags: ["MCP", "커넥터", "프로토콜", "통합"]
+draft: false
+publishedAt: 2026-04-11
+---
+
+# 🔗 MCP와 커넥터
+
+**MCP(Model Context Protocol)**는 AI 모델을 외부 데이터 소스와 도구에 연결하는 **표준 프로토콜**이에요. Anthropic이 개발하고 오픈소스로 공개했어요.
+
+## 🤔 MCP가 필요한 이유
+
+AI 모델은 기본적으로 **격리된 상태**예요:
+
+```
+AS-IS (MCP 이전):
+  AI 모델 ←→ 텍스트 입출력만 가능
+  
+  "GitHub 이슈를 확인해 줘" → "저는 인터넷에 접근할 수 없어요"
+  "DB에서 데이터 조회해 줘" → "데이터베이스에 연결할 수 없어요"
+
+TO-BE (MCP 이후):
+  AI 모델 ←→ MCP ←→ GitHub, DB, Slack, 파일 시스템...
+  
+  "GitHub 이슈를 확인해 줘" → 실제로 이슈 목록을 가져와서 보여줌
+```
+
+## 🏗️ MCP의 구조
+
+MCP는 세 가지 요소로 구성돼요:
+
+### 1. MCP 호스트 (Host)
+AI 모델이 실행되는 환경이에요.
+- Claude Code, Claude Desktop 등
+
+### 2. MCP 클라이언트 (Client)
+호스트 안에서 서버와 통신하는 부분이에요.
+- 프로토콜에 맞게 요청을 보내고 응답을 받음
+
+### 3. MCP 서버 (Server)
+실제 데이터와 도구를 제공하는 서비스예요.
+- GitHub MCP 서버, PostgreSQL MCP 서버 등
+
+```
+[Claude Code]     [MCP 서버: GitHub]    [MCP 서버: DB]
+  (호스트)              |                    |
+    ↓                   |                    |
+  [클라이언트] ←——→ [이슈, PR]        [쿼리, 데이터]
+```
+
+## 🛠️ MCP 서버가 제공하는 것
+
+### 도구 (Tools)
+AI가 호출할 수 있는 함수예요:
+```json
+{
+  "name": "create_github_issue",
+  "description": "GitHub에 새 이슈를 생성합니다",
+  "parameters": {
+    "title": "이슈 제목",
+    "body": "이슈 내용",
+    "labels": ["bug", "priority-high"]
+  }
+}
+```
+
+### 리소스 (Resources)
+AI가 읽을 수 있는 데이터예요:
+```
+github://repos/my-org/my-repo/issues
+postgres://localhost/mydb/users
+```
+
+### 프롬프트 (Prompts)
+미리 정의된 작업 템플릿이에요:
+```
+"GitHub PR 리뷰" 프롬프트:
+→ PR을 가져오고, 변경 사항을 분석하고, 리뷰 코멘트를 작성
+```
+
+## ⚙️ Claude Code에서 MCP 설정하기
+
+### 설정 파일
+`~/.claude/settings.json`에서 MCP 서버를 등록해요:
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_TOKEN": "ghp_..."
+      }
+    },
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      "env": {
+        "DATABASE_URL": "postgresql://..."
+      }
+    }
+  }
+}
+```
+
+### 사용 예시
+설정 후에는 자연스럽게 사용할 수 있어요:
+
+```
+> GitHub에서 열린 이슈 중 버그 라벨이 붙은 것을 보여줘
+
+Claude Code:
+1. MCP를 통해 GitHub API 호출
+2. 이슈 목록을 가져옴
+3. 버그 라벨 필터링
+4. 결과를 정리해서 표시
+```
+
+## 📦 주요 MCP 서버
+
+| 서버 | 기능 | 활용 |
+|------|------|------|
+| **GitHub** | 이슈, PR, 코드 검색 | 개발 워크플로우 |
+| **PostgreSQL** | DB 쿼리, 스키마 조회 | 데이터 분석 |
+| **Filesystem** | 파일 읽기/쓰기 | 로컬 작업 |
+| **Slack** | 메시지 전송/조회 | 팀 커뮤니케이션 |
+| **Google Drive** | 문서 조회/편집 | 문서 관리 |
+| **Puppeteer** | 웹 브라우징 | QA 테스트 |
+
+## 🔧 나만의 MCP 서버 만들기
+
+간단한 MCP 서버를 TypeScript로 만들 수 있어요:
+
+```typescript
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+
+const server = new McpServer({ name: "my-server" });
+
+// 도구 정의
+server.tool("get_weather", { city: "string" },
+  async ({ city }) => {
+    const data = await fetchWeather(city);
+    return { text: `${city}: ${data.temp}°C` };
+  }
+);
+
+// 서버 시작
+server.listen();
+```
+
+이렇게 만든 서버를 Claude Code에 등록하면, "서울 날씨 알려줘"라고 말할 때 실제 날씨 데이터를 가져와요.
+
+## 🌐 MCP 생태계
+
+MCP는 **오픈 표준**이에요. 누구나 서버를 만들고 공유할 수 있어요:
+
+- **공식 서버**: Anthropic이 제공하는 주요 서비스 연동
+- **커뮤니티 서버**: 개발자들이 만든 다양한 서버
+- **기업 서버**: 내부 시스템에 맞게 커스텀 개발
+
+### USB처럼 생각하세요
+MCP는 AI 세계의 USB 같은 거예요:
+- USB 이전: 프린터, 마우스, 키보드마다 다른 포트
+- USB 이후: 하나의 표준 포트로 모든 기기 연결
+
+MCP도 마찬가지예요:
+- MCP 이전: 각 AI마다 다른 방식으로 외부 시스템 연동
+- MCP 이후: 하나의 표준 프로토콜로 모든 시스템 연결
+
+## 📌 핵심 정리
+
+- MCP는 AI를 외부 시스템에 연결하는 **표준 프로토콜**이에요
+- 호스트, 클라이언트, 서버의 **3계층 구조**로 되어 있어요
+- 도구, 리소스, 프롬프트를 통해 AI의 **능력을 확장**해요
+- **오픈 표준**이라 누구나 MCP 서버를 만들고 공유할 수 있어요
+- AI 세계의 **USB**라고 생각하면 이해하기 쉬워요
