@@ -61,8 +61,16 @@ function isActive(href: string): boolean {
 }
 ---
 
+<!-- 모바일 오버레이 -->
+<div
+  id="sidebar-overlay"
+  class="fixed inset-0 z-40 hidden bg-black/50 backdrop-blur-sm lg:hidden"
+></div>
+
+<!-- 사이드바 -->
 <aside
-  class="fixed left-0 top-16 hidden h-[calc(100vh-4rem)] w-64 overflow-y-auto border-r border-border-secondary bg-bg-primary pb-8 pt-6 lg:block"
+  id="sidebar"
+  class="fixed left-0 top-16 z-40 h-[calc(100vh-4rem)] w-64 -translate-x-full overflow-y-auto border-r border-border-secondary bg-bg-primary pb-8 pt-6 transition-transform duration-200 lg:translate-x-0"
 >
   <nav class="px-4">
     {
@@ -78,7 +86,7 @@ function isActive(href: string): boolean {
                 <a
                   href={item.href}
                   class:list={[
-                    "block rounded-lg px-3 py-2 text-sm no-underline transition-colors",
+                    "sidebar-link block rounded-lg px-3 py-2 text-sm no-underline transition-colors",
                     isActive(item.href)
                       ? "bg-accent/10 font-medium text-accent"
                       : "text-text-secondary hover:bg-bg-secondary hover:text-text-primary",
@@ -94,3 +102,36 @@ function isActive(href: string): boolean {
     }
   </nav>
 </aside>
+
+<script is:inline>
+  (function () {
+    const toggle = document.getElementById("sidebar-toggle");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebar-overlay");
+
+    function openSidebar() {
+      sidebar.classList.remove("-translate-x-full");
+      overlay.classList.remove("hidden");
+    }
+
+    function closeSidebar() {
+      sidebar.classList.add("-translate-x-full");
+      overlay.classList.add("hidden");
+    }
+
+    if (toggle) {
+      toggle.addEventListener("click", function () {
+        const isOpen = !sidebar.classList.contains("-translate-x-full");
+        isOpen ? closeSidebar() : openSidebar();
+      });
+    }
+
+    if (overlay) {
+      overlay.addEventListener("click", closeSidebar);
+    }
+
+    document.querySelectorAll(".sidebar-link").forEach(function (link) {
+      link.addEventListener("click", closeSidebar);
+    });
+  })();
+</script>
