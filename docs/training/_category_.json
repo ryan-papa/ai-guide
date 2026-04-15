@@ -1,0 +1,5 @@
+{
+  "label": "학습 & 추론",
+  "position": 6,
+  "description": "파인튜닝, RLHF/DPO, 추론 최적화, 양자화"
+}
