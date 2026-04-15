@@ -1,0 +1,173 @@
+---
+title: "Everything Claude Code (ECC)"
+description: "Claude Code를 위한 에이전트 하네스 성능 최적화 시스템 — 스킬, 메모리, 보안, 지속 학습까지"
+sidebar_position: 7
+sidebar_label: "Everything Claude Code (ECC)"
+tags: ["Claude Code", "하네스", "ECC", "에이전트", "스킬", "플러그인"]
+difficulty: "중급"
+---
+
+## Everything Claude Code란?
+
+Everything Claude Code(이하 ECC)는 Claude Code를 위한 **에이전트 하네스 성능 최적화 시스템**이에요. 단순한 설정 모음이 아니라, 스킬·에이전트·메모리·보안·지속 학습까지 갖춘 완전한 시스템이에요.
+
+Anthropic 해커톤 우승작이며, Claude Code뿐 아니라 Codex, Cursor, OpenCode, Gemini 등 다양한 AI 에이전트 하네스에서 동작해요.
+
+:::tip 비유로 이해하기
+Claude Code가 **신입 개발자**라면, ECC는 그 개발자에게 **10개월치 실전 경험에서 뽑아낸 업무 매뉴얼, 체크리스트, 보안 가이드를 한꺼번에 주입**하는 것이에요. 어떤 언어를 쓰든, 어떤 프레임워크에서든 즉시 시니어처럼 일하게 해줘요.
+:::
+
+| 항목 | 내용 |
+|------|------|
+| **GitHub** | [affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code) |
+| **npm 패키지** | `ecc-universal` |
+| **Stars** | 158,000+ |
+| **라이선스** | MIT |
+| **제작자** | Affaan Mustafa (Anthropic Hackathon Winner) |
+| **지원 하네스** | Claude Code, Codex, Cursor, OpenCode, Gemini |
+
+## 핵심 구성 요소
+
+| 구성 요소 | 수량 | 설명 |
+|----------|:----:|------|
+| **에이전트** | 38개 | 언어별·도메인별 전문 에이전트 |
+| **스킬** | 156개 | 재사용 가능한 작업 패턴 |
+| **레거시 명령 심** | 72개 | 하위 호환 명령어 |
+| **언어 생태계** | 12개 | TypeScript, Python, Go, Java, Swift, PHP, Perl, Kotlin, C++, Rust 등 |
+| **내부 테스트** | 997+ | 에이전트, 스킬, 훅, 규칙 전체 검증 |
+
+## ECC가 제공하는 것
+
+### 스킬 (Skills)
+
+프로젝트별·언어별로 최적화된 작업 패턴이에요. 예를 들어 `pytorch-patterns`, `nestjs-patterns`, `swift-actor-persistence` 같은 실전 스킬이 있어요.
+
+### 인스팅트 (Instincts)
+
+세션에서 자동 추출된 학습 패턴이에요. 신뢰도 점수가 붙고, 가져오기/내보내기/진화가 가능해요.
+
+### 메모리 최적화
+
+훅이 세션 간 컨텍스트를 자동으로 저장/로드하여 이전 작업 맥락을 유지해요.
+
+### 보안 스캐닝 (AgentShield)
+
+`/security-scan` 명령으로 AgentShield를 실행해요. 1,282개 테스트, 102개 규칙으로 에이전트 코드의 보안을 검증해요.
+
+### 하네스 감사 (Harness Audit)
+
+`/harness-audit` 명령으로 현재 하네스 설정의 성능 점수를 측정해요.
+
+## 설치 방법
+
+### 방법 1: Claude Code 마켓플레이스
+
+```bash
+# 마켓플레이스 추가
+/plugin marketplace add https://github.com/affaan-m/everything-claude-code
+
+# 플러그인 설치
+/plugin install everything-claude-code@everything-claude-code
+```
+
+### 방법 2: CLI 설치
+
+```bash
+git clone https://github.com/affaan-m/everything-claude-code.git
+cd everything-claude-code
+npm install
+
+# 전체 설치 (추천)
+./install.sh --profile full
+
+# 특정 언어만 설치
+./install.sh typescript python
+```
+
+:::info 식별자 3종 — 혼동 주의
+| 용도 | 이름 |
+|------|------|
+| GitHub 레포 | `affaan-m/everything-claude-code` |
+| 마켓플레이스/플러그인 | `everything-claude-code@everything-claude-code` |
+| npm 패키지 | `ecc-universal` |
+:::
+
+### 규칙 설치 (필수)
+
+Claude Code 플러그인은 `rules`를 자동 배포할 수 없어서, 수동 설치가 필요해요.
+
+```bash
+# 전체 프로필 설치가 규칙 포함
+./install.sh --profile full
+
+# 또는 특정 언어 규칙만
+./install.sh typescript
+```
+
+## 주요 명령어
+
+| 명령 | 설명 |
+|------|------|
+| `/harness-audit` | 현재 하네스 설정 성능 점수 측정 |
+| `/security-scan` | AgentShield 보안 스캐닝 |
+| `/loop-start` | 지속 학습 루프 시작 |
+| `/loop-status` | 학습 루프 상태 확인 |
+| `/quality-gate` | 품질 게이트 검증 |
+| `/model-route` | 스마트 모델 라우팅 |
+| `/sessions` | 세션 히스토리 관리 |
+| `/pm2` | PM2 기반 멀티 에이전트 오케스트레이션 |
+
+## 훅 시스템
+
+ECC는 Claude Code 훅을 활용해 세션 시작/종료 시 자동으로 동작해요.
+
+| 훅 | 동작 |
+|----|------|
+| **SessionStart** | 메모리 로드, 컨텍스트 복원 |
+| **Stop** | 세션 요약 저장 |
+| **지속 학습** | 패턴 자동 추출 → 스킬화 |
+
+훅 프로필로 강도를 조절할 수 있어요:
+
+```bash
+# 환경 변수로 설정
+ECC_HOOK_PROFILE=minimal    # 최소
+ECC_HOOK_PROFILE=standard   # 표준 (기본)
+ECC_HOOK_PROFILE=strict     # 엄격
+```
+
+## ECC 2.0 (알파)
+
+현재 Rust로 작성된 컨트롤 플레인 프로토타입이 `ecc2/` 디렉토리에 있어요.
+
+사용 가능한 명령: `dashboard`, `start`, `sessions`, `status`, `stop`, `resume`, `daemon`
+
+아직 알파 단계이며, 일반 릴리스는 아니에요.
+
+## 크로스 하네스 지원
+
+ECC는 Claude Code 전용이 아니에요. 같은 설정으로 여러 하네스에서 동작해요.
+
+| 하네스 | 지원 방식 |
+|--------|-----------|
+| **Claude Code** | 네이티브 플러그인 |
+| **Codex** | `AGENTS.md` 기반 + 설치 타겟 |
+| **Cursor** | `--target cursor` 설치 옵션 |
+| **OpenCode** | 12 에이전트, 24 명령, 16 스킬 |
+| **Gemini** | `--target gemini` 설치 옵션 |
+
+## 핵심 용어
+
+- **하네스(Harness)**: AI 에이전트의 동작을 제어하는 규칙·스킬·훅의 집합이에요. 마구(馬具)에서 유래한 용어로, 에이전트를 올바른 방향으로 이끄는 장치예요.
+- **인스팅트(Instinct)**: 세션에서 자동 추출된 학습 패턴. 신뢰도 점수가 붙어서 검증된 패턴만 활용돼요.
+- **AgentShield**: ECC에 내장된 보안 스캐닝 도구. 에이전트가 생성한 코드의 취약점을 검사해요.
+- **훅 프로필(Hook Profile)**: 훅의 실행 강도를 minimal/standard/strict로 조절하는 설정이에요.
+
+## 참고 자료
+
+- [GitHub 레포](https://github.com/affaan-m/everything-claude-code)
+- [Shorthand Guide (X)](https://x.com/affaanmustafa/status/2012378465664745795) — 셋업, 기초, 철학
+- [Longform Guide (X)](https://x.com/affaanmustafa/status/2014040193557471352) — 토큰 최적화, 메모리, 병렬화
+- [Security Guide (X)](https://x.com/affaanmustafa/status/2033263813387223421) — 공격 벡터, 샌드박싱, CVE
+- [GitHub Marketplace — ECC Tools](https://github.com/marketplace/ecc-tools)
+- [npm: ecc-universal](https://www.npmjs.com/package/ecc-universal)

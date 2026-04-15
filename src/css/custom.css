@@ -1,0 +1,545 @@
+/**
+ * Toss-style minimal theme for AI Guide Wiki
+ * Design: White background + Blue point (#3182F6), dark mode support
+ */
+
+/* ============================================
+   Light Mode (Default)
+   ============================================ */
+:root {
+  /* Primary Color - Toss Blue */
+  --ifm-color-primary: #3182F6;
+  --ifm-color-primary-dark: #1B6CE3;
+  --ifm-color-primary-darker: #1960CC;
+  --ifm-color-primary-darkest: #144DA8;
+  --ifm-color-primary-light: #5A9AF8;
+  --ifm-color-primary-lighter: #7DB0FA;
+  --ifm-color-primary-lightest: #A8C9FC;
+
+  /* Background & Surface */
+  --ifm-background-color: #FFFFFF;
+  --ifm-background-surface-color: #F9FAFB;
+
+  /* Typography */
+  --ifm-font-family-base: 'Pretendard', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --ifm-font-size-base: 16px;
+  --ifm-line-height-base: 1.75;
+  --ifm-heading-font-weight: 700;
+
+  /* Code */
+  --ifm-code-font-size: 90%;
+  --ifm-code-border-radius: 6px;
+  --ifm-code-padding-vertical: 0.15rem;
+  --ifm-code-padding-horizontal: 0.35rem;
+  --ifm-code-background: #F2F4F6;
+
+  /* Spacing */
+  --ifm-spacing-horizontal: 1.5rem;
+  --ifm-global-spacing: 1.5rem;
+
+  /* Border & Radius */
+  --ifm-global-radius: 8px;
+  --ifm-border-color: #E5E8EB;
+
+  /* Navbar */
+  --ifm-navbar-height: 64px;
+  --ifm-navbar-background-color: rgba(255, 255, 255, 0.85);
+  --ifm-navbar-shadow: 0 1px 0 0 #E5E8EB;
+  --ifm-navbar-padding-vertical: 0;
+  --ifm-navbar-padding-horizontal: 1.5rem;
+
+  /* Footer */
+  --ifm-footer-padding-vertical: 2rem;
+  --ifm-footer-padding-horizontal: 1.5rem;
+
+  /* Table of Contents */
+  --ifm-toc-border-color: #E5E8EB;
+
+  /* Highlighted code line */
+  --docusaurus-highlighted-code-line-bg: rgba(49, 130, 246, 0.08);
+
+  /* Sidebar */
+  --doc-sidebar-width: 280px;
+}
+
+/* ============================================
+   Dark Mode
+   ============================================ */
+[data-theme='dark'] {
+  /* Primary Color - slightly brighter for dark bg */
+  --ifm-color-primary: #5A9AF8;
+  --ifm-color-primary-dark: #3182F6;
+  --ifm-color-primary-darker: #1B6CE3;
+  --ifm-color-primary-darkest: #1960CC;
+  --ifm-color-primary-light: #7DB0FA;
+  --ifm-color-primary-lighter: #A8C9FC;
+  --ifm-color-primary-lightest: #D0E3FD;
+
+  /* Background & Surface - Toss dark */
+  --ifm-background-color: #191F28;
+  --ifm-background-surface-color: #1E2530;
+
+  /* Border */
+  --ifm-border-color: #2E3642;
+  --ifm-toc-border-color: #2E3642;
+
+  /* Code */
+  --ifm-code-background: #252B36;
+
+  /* Navbar */
+  --ifm-navbar-background-color: rgba(25, 31, 40, 0.9);
+  --ifm-navbar-shadow: 0 1px 0 0 #2E3642;
+
+  /* Text */
+  --ifm-font-color-base: #E4E7EC;
+  --ifm-heading-color: #F2F4F6;
+
+  /* Highlighted code line */
+  --docusaurus-highlighted-code-line-bg: rgba(90, 154, 248, 0.12);
+}
+
+/* ============================================
+   Navbar Styles
+   ============================================ */
+.navbar {
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  box-shadow: var(--ifm-navbar-shadow);
+  border-bottom: none;
+}
+
+.navbar__title {
+  font-weight: 700;
+  font-size: 1.125rem;
+  letter-spacing: -0.02em;
+}
+
+.navbar__link {
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+
+.navbar__link--active {
+  color: var(--ifm-color-primary);
+}
+
+/* ============================================
+   Footer Styles - Minimal
+   ============================================ */
+.footer {
+  background-color: var(--ifm-background-surface-color);
+  border-top: 1px solid var(--ifm-border-color);
+  padding: 2rem 1.5rem;
+}
+
+.footer--dark {
+  background-color: var(--ifm-background-surface-color);
+}
+
+.footer__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+}
+
+.footer__link-item {
+  font-size: 0.875rem;
+  line-height: 2;
+}
+
+.footer__copyright {
+  font-size: 0.8125rem;
+  opacity: 0.5;
+  margin-top: 1.5rem;
+}
+
+/* ============================================
+   Content & Typography
+   ============================================ */
+.markdown {
+  --ifm-h1-font-size: 2rem;
+  --ifm-h2-font-size: 1.5rem;
+  --ifm-h3-font-size: 1.25rem;
+  --ifm-h4-font-size: 1.125rem;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4 {
+  letter-spacing: -0.02em;
+}
+
+.markdown h1 {
+  margin-bottom: 1.5rem;
+}
+
+.markdown h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--ifm-border-color);
+}
+
+.markdown p {
+  margin-bottom: 1.25rem;
+}
+
+/* ============================================
+   Sidebar
+   ============================================ */
+.menu__link {
+  font-size: 0.9375rem;
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  transition: background-color 0.15s ease;
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  background-color: rgba(49, 130, 246, 0.08);
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+[data-theme='dark'] .menu__link--active:not(.menu__link--sublist) {
+  background-color: rgba(90, 154, 248, 0.12);
+}
+
+.menu__list-item-collapsible:hover {
+  background: transparent;
+}
+
+/* ============================================
+   Code Blocks
+   ============================================ */
+.prism-code {
+  border-radius: 8px;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+code {
+  border: none;
+  color: var(--ifm-color-primary-dark);
+}
+
+[data-theme='dark'] code {
+  color: var(--ifm-color-primary-light);
+}
+
+/* ============================================
+   Table Styles
+   ============================================ */
+table {
+  border-collapse: collapse;
+  border: 1px solid var(--ifm-border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+  display: table;
+}
+
+table th {
+  background-color: var(--ifm-background-surface-color);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+table td {
+  font-size: 0.9375rem;
+}
+
+/* ============================================
+   Admonitions / Callouts
+   ============================================ */
+.alert {
+  border-radius: 8px;
+  border-left-width: 4px;
+}
+
+/* ============================================
+   Search & Misc
+   ============================================ */
+.DocSearch-Button {
+  border-radius: 8px !important;
+}
+
+/* Pagination */
+.pagination-nav__link {
+  border-radius: 8px;
+  border-color: var(--ifm-border-color);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pagination-nav__link:hover {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 1px var(--ifm-color-primary);
+}
+
+/* Breadcrumbs */
+.breadcrumbs__link {
+  font-size: 0.8125rem;
+}
+
+/* Scrollbar (Webkit) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ifm-border-color);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ifm-color-primary-light);
+}
+
+/* ============================================
+   Responsive Layout - Desktop (default)
+   ============================================ */
+.main-wrapper {
+  max-width: 100%;
+}
+
+/* ============================================
+   Responsive Layout - Tablet (≤996px)
+   ============================================ */
+@media (max-width: 996px) {
+  :root {
+    --doc-sidebar-width: 240px;
+    --ifm-spacing-horizontal: 1rem;
+  }
+
+  .markdown {
+    --ifm-h1-font-size: 1.75rem;
+    --ifm-h2-font-size: 1.35rem;
+    --ifm-h3-font-size: 1.15rem;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  /* Navbar adjustments for tablet */
+  .navbar {
+    padding: 0 1rem;
+  }
+
+  .navbar__title {
+    font-size: 1rem;
+  }
+
+  /* Footer compact */
+  .footer {
+    padding: 1.5rem 1rem;
+  }
+
+  /* Pagination compact */
+  .pagination-nav__link {
+    padding: 0.75rem;
+  }
+}
+
+/* ============================================
+   Responsive Layout - Mobile (≤768px)
+   ============================================ */
+@media (max-width: 768px) {
+  :root {
+    --doc-sidebar-width: 200px;
+    --ifm-spacing-horizontal: 0.75rem;
+    --ifm-navbar-height: 56px;
+  }
+
+  /* Content area margins */
+  .container {
+    padding: 0 0.75rem;
+  }
+
+  .markdown {
+    --ifm-h1-font-size: 1.5rem;
+    --ifm-h2-font-size: 1.25rem;
+    --ifm-h3-font-size: 1.1rem;
+    --ifm-h4-font-size: 1rem;
+  }
+
+  .markdown h2 {
+    margin-top: 2rem;
+  }
+
+  .markdown p {
+    margin-bottom: 1rem;
+  }
+
+  /* Hamburger menu - larger touch target (min 44x44px) */
+  .navbar__toggle {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    margin-right: 4px;
+    border-radius: 8px;
+    transition: background-color 0.15s ease;
+  }
+
+  .navbar__toggle:hover,
+  .navbar__toggle:active {
+    background-color: rgba(49, 130, 246, 0.08);
+  }
+
+  [data-theme='dark'] .navbar__toggle:hover,
+  [data-theme='dark'] .navbar__toggle:active {
+    background-color: rgba(90, 154, 248, 0.12);
+  }
+
+  .navbar__toggle svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Mobile sidebar overlay improvements */
+  .navbar-sidebar {
+    width: 85vw;
+    max-width: 320px;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+  }
+
+  [data-theme='dark'] .navbar-sidebar {
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Sidebar toggle button styling */
+  .navbar-sidebar__close {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: background-color 0.15s ease;
+    margin: 4px;
+  }
+
+  .navbar-sidebar__close:hover {
+    background-color: rgba(49, 130, 246, 0.08);
+  }
+
+  [data-theme='dark'] .navbar-sidebar__close:hover {
+    background-color: rgba(90, 154, 248, 0.12);
+  }
+
+  /* Mobile sidebar menu items - larger touch targets */
+  .navbar-sidebar .menu__link {
+    padding: 0.6rem 1rem;
+    font-size: 0.9375rem;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar-sidebar .menu__list-item-collapsible .menu__link {
+    min-height: 44px;
+  }
+
+  .navbar-sidebar .menu__caret {
+    padding: 0.6rem;
+  }
+
+  /* Navbar compact on mobile */
+  .navbar {
+    padding: 0 0.75rem;
+  }
+
+  .navbar__title {
+    font-size: 0.9375rem;
+  }
+
+  .navbar__link {
+    font-size: 0.875rem;
+  }
+
+  /* Footer compact on mobile */
+  .footer {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .footer__title {
+    font-size: 0.8125rem;
+  }
+
+  .footer__link-item {
+    font-size: 0.8125rem;
+  }
+
+  /* Table horizontal scroll on mobile */
+  .markdown table {
+    display: table;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Code blocks horizontal scroll */
+  .prism-code {
+    font-size: 0.8125rem;
+  }
+
+  /* Breadcrumbs smaller on mobile */
+  .breadcrumbs__link {
+    font-size: 0.75rem;
+  }
+
+  /* Pagination nav stacked on mobile */
+  .pagination-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .pagination-nav__link {
+    flex-basis: auto;
+    width: 100%;
+  }
+}
+
+/* ============================================
+   DifficultyBadge Styles
+   ============================================ */
+.difficulty-badge-wrapper {
+  margin-bottom: 1rem;
+  margin-top: -0.25rem;
+}
+
+/* Dark mode overrides for badge colors */
+[data-theme='dark'] .difficulty-badge[data-level='입문'] {
+  color: #34D058 !important;
+  background-color: rgba(27, 135, 63, 0.2) !important;
+  border-color: rgba(52, 208, 88, 0.3) !important;
+}
+
+[data-theme='dark'] .difficulty-badge[data-level='초급'] {
+  color: #5A9AF8 !important;
+  background-color: rgba(27, 108, 227, 0.2) !important;
+  border-color: rgba(90, 154, 248, 0.3) !important;
+}
+
+[data-theme='dark'] .difficulty-badge[data-level='중급'] {
+  color: #FBBF24 !important;
+  background-color: rgba(217, 119, 6, 0.2) !important;
+  border-color: rgba(251, 191, 36, 0.3) !important;
+}
+
+[data-theme='dark'] .difficulty-badge[data-level='고급'] {
+  color: #F87171 !important;
+  background-color: rgba(220, 38, 38, 0.2) !important;
+  border-color: rgba(248, 113, 113, 0.3) !important;
+}

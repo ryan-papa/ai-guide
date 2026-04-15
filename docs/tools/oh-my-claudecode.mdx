@@ -1,0 +1,261 @@
+---
+title: "Oh My ClaudeCode (OMC)"
+description: "Claude Code를 위한 멀티 에이전트 오케스트레이션 프레임워크 — 팀 모드, 자동 병렬 실행, 스킬 학습까지"
+sidebar_position: 5
+sidebar_label: "Oh My ClaudeCode"
+tags: ["Claude Code", "멀티 에이전트", "오케스트레이션", "플러그인", "OMC"]
+difficulty: "중급"
+---
+
+## Oh My ClaudeCode란?
+
+Oh My ClaudeCode(이하 OMC)는 Claude Code 위에서 동작하는 **멀티 에이전트 오케스트레이션 프레임워크**예요. 한마디로, Claude Code 하나로는 부족할 때 **여러 AI 에이전트를 동시에 띄워서 복잡한 작업을 나눠서 처리**하게 해주는 도구입니다.
+
+:::tip 비유로 이해하기
+Claude Code가 **혼자 일하는 시니어 개발자**라면, OMC는 그 개발자에게 **팀을 붙여주는 것**이에요. 아키텍트, 테스터, 리뷰어 등 전문 역할을 가진 에이전트들이 각자 맡은 일을 병렬로 처리하고, 리드 에이전트가 전체를 조율합니다.
+:::
+
+| 항목 | 내용 |
+|------|------|
+| **GitHub** | [Yeachan-Heo/oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) |
+| **npm 패키지** | `oh-my-claude-sisyphus` |
+| **Stars** | 29,000+ |
+| **라이선스** | MIT |
+| **요구사항** | Claude Code CLI + Claude Max/Pro 구독 또는 API 키 |
+
+## 핵심 특징
+
+OMC가 일반 Claude Code와 다른 점을 정리하면 다음과 같아요.
+
+| 특징 | 설명 |
+|------|------|
+| **팀 오케스트레이션** | 여러 Claude 에이전트를 동시 실행하여 작업 분담 |
+| **제로 설정** | 설치 후 바로 사용 가능, 지능적 기본값 제공 |
+| **자연어 인터페이스** | 명령어 암기 불필요, 자연어로 지시 |
+| **자동 병렬화** | 복잡한 작업을 전문 에이전트에 자동 분배 |
+| **비용 최적화** | 스마트 모델 라우팅으로 토큰 30~50% 절약 |
+| **스킬 학습** | 세션에서 패턴을 추출해 재사용 가능한 스킬로 저장 |
+| **멀티 AI 지원** | Claude 외에 Codex, Gemini CLI도 오케스트레이션 가능 |
+
+## 설치 방법
+
+두 가지 설치 경로가 있어요.
+
+### 방법 1: Claude Code 마켓플레이스 (추천)
+
+Claude Code 세션 안에서 아래 명령을 **하나씩** 실행하세요.
+
+```bash
+/plugin marketplace add https://github.com/Yeachan-Heo/oh-my-claudecode
+```
+
+```bash
+/plugin install oh-my-claudecode
+```
+
+### 방법 2: npm 글로벌 설치
+
+```bash
+npm i -g oh-my-claude-sisyphus@latest
+```
+
+:::info 패키지 이름 주의
+프로젝트 이름은 **oh-my-claudecode**이지만, npm 패키지명은 `oh-my-claude-sisyphus`예요. 설치/업그레이드 시 이 이름을 사용해야 해요.
+:::
+
+### 셋업
+
+설치 후 셋업을 실행하세요.
+
+```bash
+# Claude Code 세션 안에서
+/setup
+
+# 또는 터미널에서
+omc setup
+```
+
+## 오케스트레이션 모드
+
+OMC는 상황에 따라 다양한 실행 모드를 제공해요.
+
+| 모드 | 설명 | 사용 상황 |
+|------|------|-----------|
+| **Team** (추천) | 단계별 파이프라인 실행 (plan → PRD → exec → verify → fix) | 여러 에이전트가 협력하는 작업 |
+| **Autopilot** | 단일 리드 에이전트가 자율 실행 | 최소 개입으로 기능 구현 |
+| **Ralph** | 완료될 때까지 반복하는 끈질긴 모드 | 반드시 완료해야 하는 작업 |
+| **Ultrawork** | 최대 병렬 실행 | 대량 수정/리팩토링 |
+| **Deep Interview** | 소크라테스식 질문으로 요구사항 명확화 | 아이디어가 모호할 때 |
+| **CCG** | Codex + Gemini + Claude 3모델 협업 | 백엔드 + UI 동시 검토 |
+
+### Team 모드 상세
+
+v4.1.7부터 Team이 OMC의 **표준 오케스트레이션 방식**이에요.
+
+```bash
+# Claude Code 세션 안에서
+/team 3:executor "TypeScript 에러 전부 수정해줘"
+
+# 터미널에서 (tmux 필요)
+omc team 2:codex "인증 모듈 보안 리뷰"
+omc team 2:gemini "UI 컴포넌트 접근성 개선"
+```
+
+Team 모드의 실행 파이프라인:
+
+```
+team-plan → team-prd → team-exec → team-verify → team-fix (반복)
+```
+
+Team 모드를 활성화하려면 `~/.claude/settings.json`에 다음을 추가하세요:
+
+```json
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  }
+}
+```
+
+:::tip Team vs 다른 모드 — 언제 뭘 쓸까?
+- **복잡한 기능 개발** → `/team` (여러 에이전트 협업)
+- **빠르게 하나 만들기** → `/autopilot` (단일 에이전트 자율 실행)
+- **절대 포기 안 하는 작업** → `/ralph` (verify/fix 반복)
+- **대량 파일 수정** → `/ultrawork` (최대 병렬)
+- **뭘 만들지 모르겠을 때** → `/deep-interview` (요구사항 정리)
+:::
+
+## 주요 세션 내 명령어
+
+OMC는 Claude Code 세션 안에서 슬래시 명령이나 키워드로 실행해요.
+
+| 명령 | 종류 | 설명 | 예시 |
+|------|------|------|------|
+| `/team` | 슬래시 | Team 오케스트레이션 | `/team 3:executor "에러 수정"` |
+| `/autopilot` | 슬래시 | 자율 실행 | `/autopilot "TODO 앱 만들어"` |
+| `/ralph` | 슬래시/키워드 | 끈질긴 모드 | `/ralph "인증 리팩토링"` |
+| `/ultrawork` | 슬래시/키워드 | 최대 병렬 | `/ultrawork "모든 에러 수정"` |
+| `/deep-interview` | 슬래시 | 요구사항 인터뷰 | `/deep-interview "앱 아이디어"` |
+| `/ccg` | 슬래시 | 3모델 협업 | `/ccg 이 PR 리뷰해줘` |
+| `/ask` | 슬래시 | 특정 AI에 질문 | `/ask codex "보안 분석해줘"` |
+| `ultrathink` | 키워드 | 깊은 추론 모드 | `ultrathink 이 아키텍처에 대해` |
+| `deepsearch` | 키워드 | 코드베이스 검색 | `deepsearch 인증 미들웨어` |
+
+## 19개 전문 에이전트
+
+OMC는 19개의 전문화된 에이전트를 상황에 맞게 자동 배정해요. 간단한 작업에는 Haiku, 복잡한 추론에는 Opus를 자동 라우팅하여 비용을 절약합니다.
+
+주요 에이전트 역할:
+- **Executor** — 코드 구현
+- **Architect** — 설계/아키텍처
+- **Researcher** — 조사/분석
+- **Designer** — UI/UX 설계
+- **Tester** — 테스트 작성/실행
+- **Reviewer** — 코드 리뷰
+
+## 커스텀 스킬
+
+OMC는 세션에서 학습한 패턴을 **재사용 가능한 스킬 파일**로 저장해요.
+
+| 범위 | 경로 | 특징 |
+|------|------|------|
+| 프로젝트 | `.omc/skills/` | 팀과 공유 (버전 관리) |
+| 사용자 | `~/.omc/skills/` | 모든 프로젝트에서 사용 |
+
+스킬 파일 예시:
+
+```yaml
+# .omc/skills/fix-proxy-crash.md
+---
+name: Fix Proxy Crash
+description: aiohttp proxy에서 ClientDisconnectedError 발생 시 대처
+triggers: ["proxy", "aiohttp", "disconnected"]
+source: extracted
+---
+server.py:42의 핸들러를 try/except ClientDisconnectedError로 감싸기...
+```
+
+스킬 관리 명령:
+- `/skill list` — 스킬 목록 보기
+- `/skill add` — 스킬 추가
+- `/skill remove` — 스킬 삭제
+- `/learner` — 세션에서 자동으로 패턴 추출
+
+## 멀티 AI 오케스트레이션
+
+OMC는 Claude뿐 아니라 Codex와 Gemini CLI도 함께 활용할 수 있어요. 필수는 아니지만, 서로 다른 AI의 강점을 결합하면 품질이 올라가요.
+
+| Provider | 설치 | 활용 |
+|----------|------|------|
+| Claude | 기본 포함 | 범용 코딩, 추론 |
+| [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `npm i -g @google/gemini-cli` | 디자인 리뷰, 100만 토큰 컨텍스트 |
+| [Codex CLI](https://github.com/openai/codex) | `npm i -g @openai/codex` | 아키텍처 검증, 코드 리뷰 교차 검증 |
+
+```bash
+# 터미널에서 tmux 워커로 실행
+omc team 2:codex "인증 모듈 보안 리뷰"
+omc team 2:gemini "UI 접근성 개선"
+
+# 세션 안에서 3모델 합성
+/ccg 이 PR 리뷰 — 아키텍처(Codex) + UI(Gemini)
+```
+
+:::info 비용 참고
+Claude Pro + Gemini Pro + ChatGPT Pro = 약 월 $60로 모든 기능을 커버할 수 있어요. Claude만으로도 OMC는 완전히 동작합니다.
+:::
+
+## 유틸리티
+
+### Rate Limit 대기
+
+API 속도 제한에 걸렸을 때 자동으로 재개해주는 기능이에요.
+
+```bash
+omc wait          # 상태 확인
+omc wait --start  # 자동 재개 데몬 시작
+omc wait --stop   # 데몬 중지
+```
+
+### HUD (Heads-Up Display)
+
+실시간 오케스트레이션 상태를 터미널 상태바에 표시해요.
+
+```bash
+omc hud   # 라이브 HUD 렌더링
+```
+
+### 알림 연동
+
+Telegram, Discord, Slack으로 세션 완료 알림을 받을 수 있어요.
+
+```bash
+omc config-stop-callback telegram --enable --token <봇토큰> --chat <채팅ID>
+omc config-stop-callback discord --enable --webhook <URL>
+```
+
+## 요구사항 정리
+
+| 항목 | 필수 여부 | 비고 |
+|------|:---------:|------|
+| Claude Code CLI | 필수 | 기본 런타임 |
+| Claude Max/Pro 또는 API 키 | 필수 | 모델 접근 |
+| tmux | 권장 | Team 모드, Rate Limit 감지 |
+| Node.js | npm 설치 시 | 마켓플레이스 설치 시 불필요 |
+| Codex CLI | 선택 | 멀티 AI |
+| Gemini CLI | 선택 | 멀티 AI |
+
+## 핵심 용어
+
+- **오케스트레이션(Orchestration)**: 여러 AI 에이전트의 작업을 조율하고 관리하는 것. 지휘자가 오케스트라를 이끄는 것과 같아요.
+- **팀 모드(Team Mode)**: OMC의 표준 멀티 에이전트 실행 방식. 계획→PRD→실행→검증→수정 파이프라인으로 진행해요.
+- **Ralph**: "끈질긴 모드" — 작업이 완전히 완료되고 검증될 때까지 verify/fix 루프를 반복하는 실행 모드예요.
+- **HUD(Heads-Up Display)**: 현재 OMC 실행 상태를 실시간으로 보여주는 상태바예요.
+- **스마트 라우팅**: 작업 복잡도에 따라 저렴한 모델(Haiku)과 고성능 모델(Opus)을 자동 선택하는 기능이에요.
+
+## 참고 자료
+
+- [공식 문서](https://yeachan-heo.github.io/oh-my-claudecode-website)
+- [CLI 레퍼런스](https://yeachan-heo.github.io/oh-my-claudecode-website/docs.html#cli-reference)
+- [워크플로우 가이드](https://yeachan-heo.github.io/oh-my-claudecode-website/docs.html#workflows)
+- [아키텍처 문서](https://github.com/Yeachan-Heo/oh-my-claudecode/blob/main/docs/ARCHITECTURE.md)
+- [Discord 커뮤니티](https://discord.gg/PUwSMR9XNk)
