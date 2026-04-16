@@ -30,21 +30,8 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          editUrl:
-            'https://github.com/ryan-papa/ai-guide/tree/main/',
         },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          editUrl:
-            'https://github.com/ryan-papa/ai-guide/tree/main/',
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
+        blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -60,6 +47,7 @@ const config: Config = {
         language: ['ko', 'en'],
         highlightSearchTermsOnTargetPage: true,
         searchResultLimits: 8,
+        searchBarShortcutHint: false,
       },
     ],
   ],
@@ -80,42 +68,12 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'guideSidebar',
           position: 'left',
-          label: 'Docs',
-        },
-        {to: '/blog', label: 'Blog', position: 'left'},
-        {
-          href: 'https://github.com/ryan-papa/ai-guide',
-          label: 'GitHub',
-          position: 'right',
+          label: '문서',
         },
       ],
     },
     footer: {
       style: 'light',
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Introduction',
-              to: '/docs/ai-basics/',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/ryan-papa/ai-guide',
-            },
-          ],
-        },
-      ],
       copyright: `Copyright © ${new Date().getFullYear()} AI Guide. Built with Docusaurus.`,
     },
     prism: {
