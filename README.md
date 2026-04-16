@@ -33,11 +33,10 @@ ai-guide/
 │   ├── tools/             # 도구 & 플랫폼 (4개 문서)
 │   ├── training/          # 학습 & 추론
 │   └── applications/      # 응용 분야
-├── blog/                  # 블로그 포스트
 ├── src/
 │   ├── components/        # React 컴포넌트 (DifficultyBadge 등)
 │   ├── css/custom.css     # 토스 스타일 커스텀 테마
-│   ├── pages/             # 랜딩 페이지
+│   ├── pages/             # 홈 리다이렉트 (→ /docs/ai-basics/)
 │   └── theme/             # Docusaurus 테마 오버라이드
 ├── static/                # 정적 파일 (이미지, 파비콘)
 ├── docusaurus.config.ts   # Docusaurus 설정
