@@ -412,10 +412,16 @@ table td {
     width: 85vw;
     max-width: 320px;
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+    z-index: calc(var(--ifm-z-index-fixed, 200) + 10);
   }
 
   [data-theme='dark'] .navbar-sidebar {
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+  }
+
+  .navbar-sidebar__backdrop {
+    z-index: calc(var(--ifm-z-index-fixed, 200) + 9);
+    background-color: rgba(0, 0, 0, 0.5);
   }
 
   /* Sidebar toggle button styling */
