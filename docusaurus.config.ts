@@ -19,6 +19,8 @@ const config: Config = {
 
   onBrokenLinks: 'throw',
 
+  clientModules: ['./src/clientModules/closeMobileMenuOnEsc.ts'],
+
   i18n: {
     defaultLocale: 'ko',
     locales: ['ko'],

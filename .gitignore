@@ -4,6 +4,11 @@
 # Production
 /build
 
+# Playwright
+/test-results
+/playwright-report
+/playwright/.cache
+
 # Generated files
 .docusaurus
 .cache-loader
